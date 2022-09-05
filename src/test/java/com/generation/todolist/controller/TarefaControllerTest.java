@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.generation.todolist.model.Tarefa;
+import com.generation.todolist.repository.TarefaRepository;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -24,6 +25,9 @@ public class TarefaControllerTest {
 
 	@Autowired
 	private TestRestTemplate testRestTemplate;
+
+    @Autowired
+	private TarefaRepository tarefaRepository;
 	
 	@Test
 	@DisplayName("Criar nova Tarefa")
@@ -41,4 +45,16 @@ public class TarefaControllerTest {
 		
 	}
 
+    @Test
+	@DisplayName("Listar uma Tarefa Específica")
+	public void deveListarApenasUmaTarefa() {
+		
+		Tarefa buscaTarefa = tarefaRepository.save(new Tarefa(0L, "Tarefa 02", "Tarefa numero 2", "Maria", LocalDate.now(), true));
+	
+		ResponseEntity<String> resposta = testRestTemplate
+				.exchange("/tarefas/" + buscaTarefa.getId(), HttpMethod.GET, null, String.class);
+
+		assertEquals(HttpStatus.OK, resposta.getStatusCode());
+		
+	}
 }
