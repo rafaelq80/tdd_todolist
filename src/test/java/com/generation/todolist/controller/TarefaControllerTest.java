@@ -57,4 +57,66 @@ public class TarefaControllerTest {
 		assertEquals(HttpStatus.OK, resposta.getStatusCode());
 		
 	}
+
+    /**
+     * Exercício Plataforma
+     */
+
+    @Test
+	@DisplayName("Listar todas os Tarefas")
+	public void deveMostrarTodosTarefas() {
+
+		tarefaRepository.save(new Tarefa(0L, "Tarefa 03", "Tarefa numero 3", "Mariana", LocalDate.now(), false));
+
+		ResponseEntity<String> resposta = testRestTemplate
+			.exchange("/tarefas", HttpMethod.GET, null, String.class);
+
+        assertEquals(HttpStatus.OK, resposta.getStatusCode());
+
+	}
+
+    @Test
+	@DisplayName("Listar uma Tarefa Específica")
+	public void deveListarTodasAsTarefasComNomeEspecífico() {
+		
+		tarefaRepository.save(new Tarefa(0L, "Tarefa 04", "Tarefa numero 4", "Maria", LocalDate.now(), true));
+	
+		ResponseEntity<String> resposta = testRestTemplate
+				.exchange("/tarefas/nome/Tarefa 04", HttpMethod.GET, null, String.class);
+
+		assertEquals(HttpStatus.OK, resposta.getStatusCode());
+		
+	}
+
+    @Test
+	@DisplayName("Atualizar uma Tarefa Específica")
+	public void deveAtualizarUmaTarefa() {
+
+		Tarefa buscaTarefa = tarefaRepository.save(new Tarefa(0L, "Tarefa 05", "Tarefa numero 5", "Carlos", LocalDate.now(), true));
+
+		Tarefa tarefaUpdate = tarefaRepository.save(new Tarefa(buscaTarefa.getId(), "Tarefa 05 - Atualizada!", "Tarefa numero 5 - Atualizada!", "Carlos", LocalDate.now(), true));
+
+		HttpEntity<Tarefa> corpoRequisicao = new HttpEntity<Tarefa>(tarefaUpdate);
+
+		ResponseEntity<Tarefa> corpoResposta = testRestTemplate
+			.withBasicAuth("root", "root")
+			.exchange("/tarefas", HttpMethod.PUT, corpoRequisicao, Tarefa.class);
+
+		assertEquals(HttpStatus.OK, corpoResposta.getStatusCode());
+		assertEquals(corpoRequisicao.getBody().getNome(), corpoResposta.getBody().getNome());
+
+	}
+
+    @Test
+	@DisplayName("Apagar uma Tarefa")
+	public void deveApagarUmaTarefa() {
+		
+        Tarefa buscaTarefa = tarefaRepository.save(new Tarefa(0L, "Tarefa 06", "Tarefa numero 6", "Maria", LocalDate.now(), true));
+
+		ResponseEntity<String> resposta = testRestTemplate
+				.exchange("/tarefas/" + buscaTarefa.getId(), HttpMethod.DELETE, null, String.class);
+		assertEquals(HttpStatus.NO_CONTENT, resposta.getStatusCode());
+		
+	}
+
 }
