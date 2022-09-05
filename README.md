@@ -20,6 +20,11 @@ class Tarefa {
   - data: LocalDate
   - status: Boolean
   + findAll()
+  + findById(Long id)
+  + findAllByNome(String nome)
+  + post(Tarefa tarefa)
+  + put(Tarefa tarefa)
+  + delete(Long id)
 }
 ```
 <br /><br />
