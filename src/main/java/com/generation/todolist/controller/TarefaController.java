@@ -1,7 +1,5 @@
 package com.generation.todolist.controller;
 
-import java.util.Optional;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +30,10 @@ public class TarefaController {
 	}
 	
     @GetMapping("/{id}")
-	public ResponseEntity<Optional<Tarefa>> getById(@PathVariable Long id) {
-		Optional <Tarefa> buscaTarefa = tarefaRepository.findById(id);
-		
-		if(buscaTarefa.isPresent())
-			return ResponseEntity.ok(buscaTarefa);
-		else
-			return ResponseEntity.notFound().build();
-		
+	public ResponseEntity<Tarefa> getById(@PathVariable Long id) {
+		return tarefaRepository.findById(id)
+			.map(resposta -> ResponseEntity.ok(resposta))
+			.orElse(ResponseEntity.notFound().build());
 	}
     
 }
