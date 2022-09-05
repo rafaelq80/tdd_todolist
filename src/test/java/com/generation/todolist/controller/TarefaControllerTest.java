@@ -64,7 +64,7 @@ public class TarefaControllerTest {
 
     @Test
 	@DisplayName("Listar todas os Tarefas")
-	public void deveMostrarTodosTarefas() {
+	public void deveListarTodasAsTarefas() {
 
 		tarefaRepository.save(new Tarefa(0L, "Tarefa 03", "Tarefa numero 3", "Mariana", LocalDate.now(), false));
 
@@ -76,7 +76,7 @@ public class TarefaControllerTest {
 	}
 
     @Test
-	@DisplayName("Listar uma Tarefa Específica")
+	@DisplayName("Listar todas as Tarefas que contém um Nome Específica")
 	public void deveListarTodasAsTarefasComNomeEspecífico() {
 		
 		tarefaRepository.save(new Tarefa(0L, "Tarefa 04", "Tarefa numero 4", "Maria", LocalDate.now(), true));
